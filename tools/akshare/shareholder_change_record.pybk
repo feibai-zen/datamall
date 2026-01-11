@@ -1,0 +1,9 @@
+import akshare as ak
+from sqlalchemy import create_engine
+
+stock_ggcg_em_df = ak.stock_ggcg_em(symbol="全部")   # symbol="全部"; choice of {"全部", "股东增持", "股东减持"}
+#print(stock_ggcg_em_df[:3])
+engine=create_engine('mysql+pymysql://root:286072955b063d1d@8.153.196.139:3306/zen')
+
+stock_ggcg_em_df.to_sql('shareholder_change_record', con=engine, if_exists='append', index=False)
+
