@@ -2,19 +2,19 @@
 CREATE TABLE `shareholder_change_record` (
     -- 主键与基本信息
                                              `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '记录ID，自增主键',
-                                             `stock_code` VARCHAR(10) NOT NULL COMMENT '股票代码',
-                                             `stock_name` VARCHAR(50) NOT NULL COMMENT '股票名称',
-                                             `latest_price` DECIMAL(10,2) NOT NULL COMMENT '最新价',
-                                             `change_percent` DECIMAL(5,2) NOT NULL COMMENT '涨跌幅(%)',
+                                             `stock_code` VARCHAR(20) COMMENT '股票代码',
+                                             `stock_name` VARCHAR(50) COMMENT '股票名称',
+                                             `latest_price` DECIMAL(10,2) COMMENT '最新价',
+                                             `change_percent` DECIMAL(5,2) COMMENT '涨跌幅(%)',
 
     -- 股东信息
-                                             `shareholder_name` VARCHAR(200) NOT NULL COMMENT '股东名称',
-                                             `change_type` VARCHAR(10) NOT NULL COMMENT '持股变动类型-增减（如：减持、增持）',
+                                             `shareholder_name` VARCHAR(260) COMMENT '股东名称',
+                                             `change_type` VARCHAR(10) COMMENT '持股变动类型-增减（如：减持、增持）',
 
     -- 变动信息
-                                             `change_amount` DECIMAL(20,4) NOT NULL COMMENT '持股变动数量（万股）',
-                                             `change_total_ratio` DECIMAL(10,6) NOT NULL COMMENT '变动数量占总股本比例(%)',
-                                             `change_circulation_ratio` DECIMAL(10,6) NOT NULL COMMENT '变动数量占流通股比例(%)',
+                                             `change_amount` DECIMAL(20,4) COMMENT '持股变动数量（万股）',
+                                             `change_total_ratio` DECIMAL(10,6) COMMENT '变动数量占总股本比例(%)',
+                                             `change_circulation_ratio` DECIMAL(10,6) COMMENT '变动数量占流通股比例(%)',
 
     -- 变动后持股情况
                                              `after_total_holdings` DECIMAL(20,4) COMMENT '变动后持股总数（万股）',
@@ -23,9 +23,9 @@ CREATE TABLE `shareholder_change_record` (
                                              `after_circulation_ratio` DECIMAL(10,6) COMMENT '变动后持股占流通股比例(%)',
 
     -- 时间信息
-                                             `change_start_date` DATE NOT NULL COMMENT '变动开始日期',
-                                             `change_end_date` DATE NOT NULL COMMENT '变动截止日期',
-                                             `announcement_date` DATE NOT NULL COMMENT '公告日期',
+                                             `change_start_date` DATE COMMENT '变动开始日期',
+                                             `change_end_date` DATE COMMENT '变动截止日期',
+                                             `announcement_date` DATE COMMENT '公告日期',
 
     -- 系统字段
                                              `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
