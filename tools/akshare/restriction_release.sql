@@ -1,3 +1,9 @@
+
+-- 字段： stock_code,stock_name,release_time,restricted_share_type,release_quantity,actual_release_quantity,
+--     actual_release_market_value,proportion_of_released_market_value,closing_price_before_release_day,
+--     price_change_rate_20_days_before_release,price_change_rate_20_days_after_release
+
+
 -- 创建 限售股解禁详情 表
 CREATE TABLE `restricted_shares_release_detail` (
     -- 主键与基本信息

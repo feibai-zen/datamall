@@ -8,7 +8,6 @@ host = '8.153.196.139'
 user = 'root'
 password = '286072955b063d1d'
 database = 'zen'
-table = 'shareholder_change_record'
 
 
 def convert_nan_to_none(value):
@@ -40,12 +39,18 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
         # 创建游标对象
         mycursor = mydb.cursor()
 
+        # TRUNCATE会重置自增ID，更快且自动提交事务
+        sql = "TRUNCATE TABLE restricted_shares_release_detail"
+        mycursor.execute(sql)
+        mydb.commit()
+        print(f"成功清空表 restricted_shares_release_detail")
+
         # 获取列名
         columns = list(df.columns)
         placeholders = ', '.join(['%s'] * len(columns))
 
         # 准备SQL语句
-        sql = f"INSERT INTO {table} ({table_columns}) VALUES ({placeholders})"
+        sql = f"INSERT INTO {table_name} ({table_columns}) VALUES ({placeholders})"
 
         # 逐行插入数据
         success_count = 0
@@ -88,11 +93,13 @@ if __name__ == '__main__':
     current_date = date.today()
     days_ago = current_date - timedelta(days=1)
     fetch_date = days_ago.strftime("%Y-%m-%d")
-
     table_cols = 'stock_code,stock_name,release_time,restricted_share_type,release_quantity,actual_release_quantity,actual_release_market_value,proportion_of_released_market_value,closing_price_before_release_day,price_change_rate_20_days_before_release,price_change_rate_20_days_after_release'
-    print(f"==============DAILY BEGIN: {fetch_date}=====================")
-    df = ak.stock_restricted_release_detail_em(start_date="20260120", end_date="20260320")
-    insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df, table_name='shareholder_change_record',
-                              table_columns=table_cols)
 
+    print(f"==============DAILY BEGIN: {fetch_date}=====================")
+    df = ak.stock_restricted_release_detail_em(start_date="19000101", end_date="30001231")
+
+    # pick up from the second column in the df
+    insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df.iloc[:, 1:],
+                              table_name='restricted_shares_release_detail',
+                              table_columns=table_cols)
     print(f"==============DAILY END: {fetch_date}=======================")

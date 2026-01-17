@@ -9,7 +9,6 @@ host = '8.153.196.139'
 user = 'root'
 password = '286072955b063d1d'
 database = 'zen'
-table = 'shareholder_change_record'
 
 
 def convert_nan_to_none(value):
@@ -46,7 +45,7 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
         placeholders = ', '.join(['%s'] * len(columns))
 
         # 准备SQL语句
-        sql = f"INSERT INTO {table} ({table_columns}) VALUES ({placeholders})"
+        sql = f"INSERT INTO {table_name} ({table_columns}) VALUES ({placeholders})"
 
         # 逐行插入数据
         success_count = 0

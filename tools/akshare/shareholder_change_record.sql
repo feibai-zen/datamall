@@ -1,3 +1,8 @@
+-- 字段： stock_code,stock_name,latest_price,change_percent,shareholder_name,change_type,change_amount,change_total_ratio,
+--     change_circulation_ratio,after_total_holdings,after_total_ratio,after_circulation_holdings,after_circulation_ratio,
+--     change_start_date,change_end_date,announcement_date
+
+
 -- 创建股东持股变动记录表
 CREATE TABLE `shareholder_change_record` (
     -- 主键与基本信息
@@ -42,7 +47,7 @@ CREATE TABLE `shareholder_change_record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股东持股变动记录表';
 
 
-demo:  
-代码      名称      最新价   涨跌幅       股东名称     持股变动信息-增减  持股变动信息-变动数量  持股变动信息-占总股本比例  持股变动信息-占流通股比例  变动后持股情况-持股总数  变动后持股情况-占总股本比例  变动后持股情况-持流通股数  变动后持股情况-占流通股比例       变动开始日       变动截止日         公告日
-920367   新赣江     22.28    6.86        张明          减持           54.4083                 0.767815           1.30                    443.6863            6.26                        443.6863               10.62                    2025-11-21    2026-01-09       2026-01-09
-920367   新赣江     22.28    6.86        张咪          减持           2.5744                  0.036330           0.06                    246.4754            3.48                        246.4754               5.90                     2025-11-21    2026-01-09       2026-01-09
+-- demo:
+-- 代码      名称      最新价   涨跌幅       股东名称     持股变动信息-增减  持股变动信息-变动数量  持股变动信息-占总股本比例  持股变动信息-占流通股比例  变动后持股情况-持股总数  变动后持股情况-占总股本比例  变动后持股情况-持流通股数  变动后持股情况-占流通股比例       变动开始日       变动截止日         公告日
+-- 920367   新赣江     22.28    6.86        张明          减持           54.4083                 0.767815           1.30                    443.6863            6.26                        443.6863               10.62                    2025-11-21    2026-01-09       2026-01-09
+-- 920367   新赣江     22.28    6.86        张咪          减持           2.5744                  0.036330           0.06                    246.4754            3.48                        246.4754               5.90                     2025-11-21    2026-01-09       2026-01-09
