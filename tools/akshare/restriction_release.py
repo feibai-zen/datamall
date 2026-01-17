@@ -4,7 +4,6 @@ import pymysql
 import numpy as np
 from datetime import date, timedelta
 
-
 host = '8.153.196.139'
 user = 'root'
 password = '286072955b063d1d'
@@ -56,8 +55,8 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
             try:
                 # 将行数据转换为元组
                 values = tuple(convert_tuple_nan_to_none(row))
-                if need_total == False and fetch_date is not None and values[-1].strftime("%Y-%m-%d") != fetch_date:
-                    continue
+                # if need_total == False and fetch_date is not None and values[4].strftime("%Y-%m-%d") == fetch_date:
+                #     continue
 
                 mycursor.execute(sql, values)
                 success_count += 1
@@ -89,10 +88,11 @@ if __name__ == '__main__':
     current_date = date.today()
     days_ago = current_date - timedelta(days=1)
     fetch_date = days_ago.strftime("%Y-%m-%d")
-    table_cols = 'stock_code,stock_name,latest_price,change_percent,shareholder_name,change_type,change_amount,change_total_ratio,change_circulation_ratio,after_total_holdings,after_total_ratio,after_circulation_holdings,after_circulation_ratio,change_start_date,change_end_date,announcement_date'
 
+    table_cols = 'stock_code,stock_name,release_time,restricted_share_type,release_quantity,actual_release_quantity,actual_release_market_value,proportion_of_released_market_value,closing_price_before_release_day,price_change_rate_20_days_before_release,price_change_rate_20_days_after_release'
     print(f"==============DAILY BEGIN: {fetch_date}=====================")
-    df = stock_ggcg_em_df = ak.stock_ggcg_em(symbol="全部")  # symbol="全部"; choice of {"全部", "股东增持", "股东减持"}  # 读取数据
+    df = ak.stock_restricted_release_detail_em(start_date="20260120", end_date="20260320")
     insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df, table_name='shareholder_change_record',
                               table_columns=table_cols)
+
     print(f"==============DAILY END: {fetch_date}=======================")
