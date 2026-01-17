@@ -1,5 +1,5 @@
 -- 创建 限售股解禁详情 表
-CREATE TABLE `shareholder_change_record` (
+CREATE TABLE `restricted_shares_release_detail` (
     -- 主键与基本信息
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '记录ID, 自增主键',
     `stock_code` VARCHAR(20) COMMENT '股票代码',
@@ -27,5 +27,5 @@ CREATE TABLE `shareholder_change_record` (
     PRIMARY KEY (`id`),
     INDEX `idx_stock_code` (`stock_code`),
     INDEX `idx_release_time` (`release_time`),
-    INDEX `idx_restricted_share_type` (`restricted_share_type`)
+    INDEX `idx_c_share_type` (`restricted_share_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='股票解禁信息表';
