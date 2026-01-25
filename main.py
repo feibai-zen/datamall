@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from api import hello
-from api.restricted_release import restricted_holder
+from app import hello
+from app.restricted_release import restricted_holder
 
 app = FastAPI(
     title="Hello World API",
@@ -9,7 +9,7 @@ app = FastAPI(
 )
 
 # 包含API路由
-app.include_router(hello.router, prefix="/api", tags=["hello"])
+app.include_router(hello.router, prefix="/app", tags=["hello"])
 app.include_router(restricted_holder.router, prefix="/restricted", tags=["hello"])
 
 @app.get("/")
