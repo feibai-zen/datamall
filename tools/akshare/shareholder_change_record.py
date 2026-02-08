@@ -64,17 +64,17 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
                 if success_count % 100 == 0:
                     mydb.commit()
             except pymysql.connect.Error as err:
-                print(f"插入数据时出错: {err}")
+                print(f"插入数据时出错: {err}\n")
                 error_count += 1
                 continue
 
         # 最终提交
         mydb.commit()
 
-        print(f"日期:{fetch_date}, 数据插入完成！成功: {success_count}条，失败: {error_count}条")
+        print(f"日期:{fetch_date}, 数据插入完成！成功: {success_count}条，失败: {error_count}条\n")
 
     except pymysql.connect.Error as err:
-        print(f"数据库连接或操作出错: {err}")
+        print(f"数据库连接或操作出错: {err}\n")
 
     finally:
         # 关闭连接
@@ -90,8 +90,8 @@ if __name__ == '__main__':
     fetch_date = days_ago.strftime("%Y-%m-%d")
     table_cols = 'stock_code,stock_name,latest_price,change_percent,shareholder_name,change_type,change_amount,change_total_ratio,change_circulation_ratio,after_total_holdings,after_total_ratio,after_circulation_holdings,after_circulation_ratio,change_start_date,change_end_date,announcement_date'
 
-    print(f"==============DAILY BEGIN: {fetch_date}=====================")
+    print(f"==============DAILY BEGIN: {fetch_date}=====================\n")
     df = stock_ggcg_em_df = ak.stock_ggcg_em(symbol="全部")  # symbol="全部"; choice of {"全部", "股东增持", "股东减持"}  # 读取数据
     insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df, table_name='shareholder_change_record',
                               table_columns=table_cols)
-    print(f"==============DAILY END: {fetch_date}=======================")
+    print(f"==============DAILY END: {fetch_date}=======================\n")

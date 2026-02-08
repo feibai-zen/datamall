@@ -45,7 +45,7 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
         sql = "TRUNCATE TABLE restricted_shares_release_detail"
         mycursor.execute(sql)
         mydb.commit()
-        print(f"成功清空表 restricted_shares_release_detail")
+        print(f"成功清空表 restricted_shares_release_detail\n")
 
         # 获取列名
         columns = list(df.columns)
@@ -71,17 +71,17 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
                 if success_count % 100 == 0:
                     mydb.commit()
             except pymysql.connect.Error as err:
-                print(f"插入数据时出错: {err}")
+                print(f"插入数据时出错: {err}\n")
                 error_count += 1
                 continue
 
         # 最终提交
         mydb.commit()
 
-        print(f"日期:{fetch_date}, 数据插入完成！成功: {success_count}条，失败: {error_count}条")
+        print(f"日期:{fetch_date}, 数据插入完成！成功: {success_count}条，失败: {error_count}条\n")
 
     except pymysql.connect.Error as err:
-        print(f"数据库连接或操作出错: {err}")
+        print(f"数据库连接或操作出错: {err}\n")
 
     finally:
         # 关闭连接
@@ -97,11 +97,11 @@ if __name__ == '__main__':
     fetch_date = days_ago.strftime("%Y-%m-%d")
     table_cols = 'stock_code,stock_name,release_time,restricted_share_type,release_quantity,actual_release_quantity,actual_release_market_value,proportion_of_released_market_value,closing_price_before_release_day,price_change_rate_20_days_before_release,price_change_rate_20_days_after_release'
 
-    print(f"==============DAILY BEGIN: {fetch_date}=====================")
+    print(f"==============DAILY BEGIN: {fetch_date}=====================\n")
     df = ak.stock_restricted_release_detail_em(start_date="19000101", end_date="30001231")
 
     # pick up from the second column in the df
     insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df.iloc[:, 1:],
                               table_name='restricted_shares_release_detail',
                               table_columns=table_cols)
-    print(f"==============DAILY END: {fetch_date}=======================")
+    print(f"==============DAILY END: {fetch_date}=======================\n")

@@ -1,0 +1,4 @@
+crontab -e
+
+0 0 1 * * ?  python /home/datamall/tools/akshare/shareholder_change_record.py >>  /home/datamall/logs/shareholder_change_record.log
+0 0 2 * * ?  python /home/datamall/tools/akshare/restriction_release.py >>  /home/datamall/logs/restriction_release.log
