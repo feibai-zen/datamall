@@ -4,7 +4,7 @@ import pymysql
 import numpy as np
 from datetime import date, timedelta
 
-# 解禁详情
+# 解禁详情——每次全量拉取
 
 host = '8.153.196.139'
 user = 'root'
@@ -24,7 +24,7 @@ def convert_tuple_nan_to_none(data_tuple):
     return tuple(convert_nan_to_none(item) for item in data_tuple)
 
 
-def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_columns):
+def insert_dataframe_to_mysql(df, table_name, table_columns):
     """
     将DataFrame数据逐行插入到MySQL数据库
     """
@@ -62,14 +62,13 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
             try:
                 # 将行数据转换为元组
                 values = tuple(convert_tuple_nan_to_none(row))
-                # if need_total == False and fetch_date is not None and values[4].strftime("%Y-%m-%d") == fetch_date:
-                #     continue
 
                 mycursor.execute(sql, values)
                 success_count += 1
-                # 每100行提交一次，平衡性能和数据安全
-                if success_count % 100 == 0:
+                # 每500行提交一次，平衡性能和数据安全
+                if success_count % 500 == 0:
                     mydb.commit()
+                    print(f"成功插入: {success_count}\n")
             except pymysql.connect.Error as err:
                 print(f"插入数据时出错: {err}\n")
                 error_count += 1
@@ -77,7 +76,6 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
 
         # 最终提交
         mydb.commit()
-
         print(f"日期:{fetch_date}, 数据插入完成！成功: {success_count}条，失败: {error_count}条\n")
 
     except pymysql.connect.Error as err:
@@ -101,7 +99,7 @@ if __name__ == '__main__':
     df = ak.stock_restricted_release_detail_em(start_date="19000101", end_date="30001231")
 
     # pick up from the second column in the df
-    insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df.iloc[:, 1:],
+    insert_dataframe_to_mysql(df=df.iloc[:, 1:],
                               table_name='restricted_shares_release_detail',
                               table_columns=table_cols)
     print(f"==============DAILY END: {fetch_date}=======================\n")

@@ -4,7 +4,7 @@ import pymysql
 import numpy as np
 from datetime import date, timedelta
 
-
+# 股东增减持——增量拉取/全量拉取
 host = '8.153.196.139'
 user = 'root'
 password = '286072955b063d1d'
@@ -40,6 +40,13 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
         # 创建游标对象
         mycursor = mydb.cursor()
 
+        if need_total:
+            # TRUNCATE会重置自增ID，更快且自动提交事务
+            sql = "TRUNCATE TABLE shareholder_change_record"
+            mycursor.execute(sql)
+            mydb.commit()
+            print(f"成功清空股东增减持表 shareholder_change_record\n")
+
         # 获取列名
         columns = list(df.columns)
         placeholders = ', '.join(['%s'] * len(columns))
@@ -60,9 +67,10 @@ def insert_dataframe_to_mysql(fetch_date, need_total, df, table_name, table_colu
 
                 mycursor.execute(sql, values)
                 success_count += 1
-                # 每100行提交一次，平衡性能和数据安全
-                if success_count % 100 == 0:
+                # 每500行提交一次，平衡性能和数据安全
+                if success_count % 500 == 0:
                     mydb.commit()
+                    print(f"成功插入: {success_count}\n")
             except pymysql.connect.Error as err:
                 print(f"插入数据时出错: {err}\n")
                 error_count += 1
@@ -92,6 +100,6 @@ if __name__ == '__main__':
 
     print(f"==============DAILY BEGIN: {fetch_date}=====================\n")
     df = stock_ggcg_em_df = ak.stock_ggcg_em(symbol="全部")  # symbol="全部"; choice of {"全部", "股东增持", "股东减持"}  # 读取数据
-    insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=False, df=df, table_name='shareholder_change_record',
+    insert_dataframe_to_mysql(fetch_date=fetch_date, need_total=True, df=df, table_name='shareholder_change_record',
                               table_columns=table_cols)
     print(f"==============DAILY END: {fetch_date}=======================\n")
